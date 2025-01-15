@@ -1,5 +1,38 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../context/UserContext'
+import styled from 'styled-components'
+
+const FormContainer = styled.form`
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 20px;
+`
+
+const FormGroup = styled.div`
+  margin-bottom: 15px;
+`
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+`
+
+const Input = styled.input`
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+`
+
+const Button = styled.button`
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+`
 
 function AddUserForm () {
   const { addUser } = useContext(UserContext)
@@ -18,7 +51,7 @@ function AddUserForm () {
     }
 
     const userToAdd = {
-      id: Date.now(), // Generate a unique ID
+      id: Date.now(),
       ...newUser
     }
 
@@ -27,32 +60,32 @@ function AddUserForm () {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <FormContainer onSubmit={handleSubmit}>
       <h3>Add New User</h3>
-      <div>
-        <label>
+      <FormGroup>
+        <Label>
           Name:
-          <input
+          <Input
             type='text'
             name='name'
             value={newUser.name}
             onChange={handleInputChange}
           />
-        </label>
-      </div>
-      <div>
-        <label>
+        </Label>
+      </FormGroup>
+      <FormGroup>
+        <Label>
           Email:
-          <input
+          <Input
             type='email'
             name='email'
             value={newUser.email}
             onChange={handleInputChange}
           />
-        </label>
-      </div>
-      <button type='submit'>Add User</button>
-    </form>
+        </Label>
+      </FormGroup>
+      <Button type='submit'>Add User</Button>
+    </FormContainer>
   )
 }
 

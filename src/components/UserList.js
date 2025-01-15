@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext'
+import styles from './UserList.module.css'
 
 function UserList () {
-  const { users, addUser, deleteUser } = useContext(UserContext)
+  const { users,addUser, deleteUser } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    // Only fetch users if the users array is empty
     if (users.length === 0) {
       const fetchUsers = async () => {
         try {
@@ -18,7 +18,6 @@ function UserList () {
             throw new Error('Failed to fetch users')
           }
           const data = await response.json()
-          // Add fetched users to the context
           data.forEach(user => addUser(user))
         } catch (error) {
           setError(error.message)
@@ -42,13 +41,18 @@ function UserList () {
   }
 
   return (
-    <div>
+    <div className={styles.userList}>
       <h2>User List</h2>
       <ul>
         {users.map(user => (
-          <li key={user.id}>
+          <li key={user.id} className={styles.userItem}>
             <strong>{user.name}</strong> - {user.email}
-            <button onClick={() => deleteUser(user.id)}>Delete</button>
+            <button
+              className={styles.deleteButton}
+              onClick={() => deleteUser(user.id)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
