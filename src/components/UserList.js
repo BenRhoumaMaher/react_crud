@@ -28,6 +28,11 @@ function UserList () {
     fetchUsers() // Call the function to fetch data
   }, []) // Empty dependency array means this runs only once
 
+  // Function to handle deleting a user
+  const handleDelete = userId => {
+    setUsers(users.filter(user => user.id !== userId))
+  }
+
   if (loading) {
     return <p>Loading...</p>
   }
@@ -41,7 +46,10 @@ function UserList () {
       <h2>User List</h2>
       <ul>
         {users.map(user => (
-          <li key={user.id}>{user.name}</li>
+          <li key={user.id}>
+            <strong>{user.name}</strong> - {user.email}
+            <button onClick={() => handleDelete(user.id)}>Delete</button>
+          </li>
         ))}
       </ul>
     </div>
