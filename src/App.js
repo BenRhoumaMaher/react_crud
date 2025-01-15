@@ -1,10 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
+import Layout from './components/Layout';
 
 function App() {
+  const name = 'React Developer';
   return (
     <div className="App">
-      Hello World
+      <Layout>
+      <h1>Hello, {name} !</h1>
+      </Layout >
     </div>
   );
 }
