@@ -4,6 +4,7 @@ function UserList () {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [newUser, setNewUser] = useState({ name: '', email: '' })
 
   // Fetch data from an API using useEffect
   useEffect(() => {
@@ -33,6 +34,27 @@ function UserList () {
     setUsers(users.filter(user => user.id !== userId))
   }
 
+  const handleInputChange = e => {
+    const { name, value } = e.target
+    setNewUser({ ...newUser, [name]: value })
+  }
+
+  const handleAddUser = e => {
+    e.preventDefault()
+    if (newUser.name.trim() === '' || newUser.email.trim() === '') {
+      alert('Please fill in all fields')
+      return
+    }
+
+    const userToAdd = {
+      id: users.length + 1,
+      ...newUser
+    }
+
+    setUsers([...users, userToAdd])
+    setNewUser({ name: '', email: '' })
+  }
+
   if (loading) {
     return <p>Loading...</p>
   }
@@ -52,6 +74,32 @@ function UserList () {
           </li>
         ))}
       </ul>
+      <form onSubmit={handleAddUser}>
+        <h3>Add New User</h3>
+        <div>
+          <label>
+            Name:
+            <input
+              type='text'
+              name='name'
+              value={newUser.name}
+              onChange={handleInputChange}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Email:
+            <input
+              type='email'
+              name='email'
+              value={newUser.email}
+              onChange={handleInputChange}
+            />
+          </label>
+        </div>
+        <button type='submit'>Add User</button>
+      </form>
     </div>
   )
 }
