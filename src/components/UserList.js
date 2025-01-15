@@ -1,54 +1,13 @@
-import React, { useContext, useEffect, useState, useRef } from 'react'
+import React, { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
-import axios from 'axios'
 import styles from './UserList.module.css'
 
-function UserList () {
-  const { users, addUser, deleteUser } = useContext(UserContext)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+const UserList = React.memo(() => {
+  const { users, deleteUser } = useContext(UserContext)
 
-  // Create a ref to cache the fetched users
-  const usersCache = useRef(null)
-
-  useEffect(() => {
-    // If users are already cached, skip fetching
-    if (usersCache.current) {
-      setLoading(false)
-      return
-    }
-
-    // Fetch users from the API
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/users'
-        )
-        if (response.status !== 200) {
-          throw new Error('Failed to fetch users')
-        }
-
-        // Cache the fetched users
-        usersCache.current = response.data
-
-        // Add fetched users to the context
-        response.data.forEach(user => addUser(user))
-      } catch (error) {
-        setError(error.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchUsers()
-  }, [addUser])
-
-  if (loading) {
-    return <p>Loading...</p>
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>
+  // Fallback if users is undefined or empty
+  if (!users || users.length === 0) {
+    return <p>No users found.</p>
   }
 
   return (
@@ -69,6 +28,6 @@ function UserList () {
       </ul>
     </div>
   )
-}
+})
 
 export default UserList

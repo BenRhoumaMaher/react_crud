@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { Suspense, useContext } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Layout from './components/Layout'
-import UserList from './components/UserList'
-import AddUserForm from './components/AddUserForm'
 import Home from './components/Home'
+import { UserContext } from './context/UserContext'
+
+// Lazy load components
+const UserList = React.lazy(() => import('./components/UserList'))
+const AddUserForm = React.lazy(() => import('./components/AddUserForm'))
 
 function App () {
+  const { users, deleteUser } = useContext(UserContext)
+
   return (
     <Router>
       <Layout>
@@ -23,11 +28,16 @@ function App () {
           </ul>
         </nav>
 
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/users' element={<UserList />} />
-          <Route path='/add-user' element={<AddUserForm />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route
+              path='/users'
+              element={<UserList users={users} deleteUser={deleteUser} />}
+            />
+            <Route path='/add-user' element={<AddUserForm />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </Router>
   )
